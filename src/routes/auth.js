@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { signIn, signUp } from '../controller/auth.js';
-import { verifyOpt } from '../controller/otp.js';
+import { signIn, signUp, verifyOpt } from '../controllers/auth.js';
 
 const router = Router();
 
