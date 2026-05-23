@@ -4,6 +4,8 @@ import { Otp } from '../models/otp.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/token.js';
 import { otpSchema } from '../schemas/otp.js';
+import { generateOtp } from '../utils/otp.js';
+import { hashPassword, hidePassword, verifyPassword } from '../utils/password.js';
 
 export const signUp = async (req, res) => {
   try {
@@ -31,13 +33,13 @@ export const signUp = async (req, res) => {
       return res.status(409).json({ message: 'Mobile number already exist' });
     }
 
-    data.password = await bcrypt.hash(data.password, 10);
+    const hashPassword = await hashPassword(data.password);
 
     const user = await User.create(data);
 
-    const generateOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    const generateOtp = generateOtp();
 
-    const otpData = await Otp.create({
+    const otp = await Otp.create({
       validate: user.email || user.mobileNo,
       value: generateOtp,
     });
@@ -49,7 +51,7 @@ export const signUp = async (req, res) => {
   }
 };
 
-export const verifyOpt = async (req, res) => {
+export const verifyOtp = async (req, res) => {
   try {
     const { data, success, error } = otpSchema.safeParse(req.body);
 
@@ -73,8 +75,7 @@ export const verifyOpt = async (req, res) => {
       return res.status(400).json({ message: 'User not found' });
     }
 
-    const userResponse = user.toObject();
-    delete userResponse.password;
+    const userResponse = hidePassword(user);
 
     const token = generateToken({
       id: user._id,
@@ -110,14 +111,13 @@ export const signIn = async (req, res) => {
       return res.status(400).json({ message: 'User not found' });
     }
 
-    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+    const isPasswordValid = await verifyPassword(data.password, user.password);
 
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid password' });
     }
 
-    const userResponse = user.toObject();
-    delete userResponse.password;
+    const userResponse = hidePassword(user);
 
     const token = generateToken({
       id: user._id,
