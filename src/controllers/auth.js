@@ -6,6 +6,7 @@ import { generateToken } from '../utils/token.js';
 import { otpSchema } from '../schemas/otp.js';
 import { generateOtp } from '../utils/otp.js';
 import { hashPassword, hidePassword, verifyPassword } from '../utils/password.js';
+import { signUpService } from '../services/auth/index.js';
 
 export const signUp = async (req, res) => {
   try {
@@ -21,30 +22,15 @@ export const signUp = async (req, res) => {
         .json({ message: 'Either email or mobile number is compulsory' });
     }
 
-    const isEmailExist = await User.findOne({ email: data.email });
+    const result = await signUpService(data);
 
-    if (isEmailExist) {
-      return res.status(409).json({ message: 'Email already exist' });
+    if (!result.success) {
+      return res.status(result.status).json({ message: result.message });
     }
 
-    const isMobileNoExist = await User.findOne({ mobileNo: data.mobileNo });
-
-    if (isMobileNoExist) {
-      return res.status(409).json({ message: 'Mobile number already exist' });
-    }
-
-    const hashPassword = await hashPassword(data.password);
-
-    const user = await User.create(data);
-
-    const generateOtp = generateOtp();
-
-    const otp = await Otp.create({
-      validate: user.email || user.mobileNo,
-      value: generateOtp,
-    });
-
-    return res.status(201).json({ message: 'User register successfully' });
+    return res
+      .status(result.status)
+      .json({ message: result.message, data: result.data });
   } catch (error) {
     console.log('sign up error: ', error);
     return res.status(500).json({ message: 'Internal server error', error: error });

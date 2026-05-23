@@ -1,11 +1,11 @@
 export const hashPassword = async (password) => {
-  const hashPassword = await bcrypt.hash(password, 10);
-  return hashPassword;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  return hashedPassword;
 };
 
 export const verifyPassword = async (password, hashedPassword) => {
-  const verifyPassword = await bcrypt.compare(password, hashedPassword);
-  return verifyPassword;
+  const verifiedPassword = await bcrypt.compare(password, hashedPassword);
+  return verifiedPassword;
 };
 
 export const hidePassword = (user) => {
