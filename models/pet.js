@@ -7,14 +7,10 @@ const petSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      minlength: 2,
-      maxlength: 15,
       trim: true,
     },
     description: {
       type: String,
-      minlength: 20,
-      maxlength: 100,
     },
     category: {
       type: String,
@@ -44,8 +40,6 @@ const petSchema = new mongoose.Schema(
     color: {
       type: String,
       trim: true,
-      minlength: 3,
-      maxlength: 15,
     },
     price: {
       type: Number,

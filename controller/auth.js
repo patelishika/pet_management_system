@@ -33,6 +33,9 @@ export const signUp = async (req, res) => {
 
     const user = await User.create(data);
 
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
     const token = generateToken({
       id: user.id,
       email: user.email,
@@ -42,7 +45,7 @@ export const signUp = async (req, res) => {
 
     return res
       .status(201)
-      .json({ message: 'User register successfully', data: user, token });
+      .json({ message: 'User register successfully', data: userResponse, token });
   } catch (error) {
     console.log('sign up error: ', error);
     return res.status(500).json({ message: 'Internal server error', error: error });
