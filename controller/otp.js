@@ -34,6 +34,7 @@ export const verifyOpt = async (req, res) => {
       id: user._id,
       email: user.email,
       mobileNo: user.mobileNo,
+      role: user.role,
     });
 
     return res.status(200).json({
