@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { ROLES } from '../schemas/enums.js';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const userSchema = new mongoose.Schema(
   {
@@ -39,5 +40,7 @@ const userSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+userSchema.plugin(mongoosePaginate);
 
 export const User = mongoose.model('User', userSchema);
