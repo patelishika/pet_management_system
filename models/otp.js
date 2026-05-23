@@ -8,7 +8,7 @@ const otpSchema = new mongoose.Schema({
   value: {
     type: String,
     required: true,
-    match: /^[A-Za-z0-9]{6}$/,
+    match: /^[0-9]{6}$/,
   },
 });
 

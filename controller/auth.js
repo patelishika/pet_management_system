@@ -1,7 +1,7 @@
 import { registerSchema } from '../schemas/user.js';
 import { User } from '../models/user.js';
+import { Otp } from '../models/otp.js';
 import bcrypt from 'bcryptjs';
-import { generateToken } from '../utils/token.js';
 
 export const signUp = async (req, res) => {
   try {
@@ -33,19 +33,14 @@ export const signUp = async (req, res) => {
 
     const user = await User.create(data);
 
-    const userResponse = user.toObject();
-    delete userResponse.password;
+    const generateOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    const token = generateToken({
-      id: user.id,
-      email: user.email,
-      mobileNo: user.mobileNo,
-      role: user.role,
+    const otpData = await Otp.create({
+      validate: user.email || user.mobileNo,
+      value: generateOtp,
     });
 
-    return res
-      .status(201)
-      .json({ message: 'User register successfully', data: userResponse, token });
+    return res.status(201).json({ message: 'User register successfully' });
   } catch (error) {
     console.log('sign up error: ', error);
     return res.status(500).json({ message: 'Internal server error', error: error });
