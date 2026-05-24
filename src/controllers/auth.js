@@ -6,7 +6,7 @@ import { generateToken } from '../utils/token.js';
 import { otpSchema } from '../schemas/otp.js';
 import { generateOtp } from '../utils/otp.js';
 import { hashPassword, hidePassword, verifyPassword } from '../utils/password.js';
-import { signUpService } from '../services/auth/index.js';
+import { signUpService, verifyOtpService } from '../services/auth/index.js';
 
 export const signUp = async (req, res) => {
   try {
@@ -45,23 +45,11 @@ export const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    const otpRecord = await Otp.findOne({
-      validate: data.validate,
-    });
+    const result = await verifyOtpService(data);
 
-    if (!otpRecord || otpRecord.value !== data.value) {
-      return res.status(400).json({ message: 'Invalid otp' });
+    if (!result.success) {
+      return res.status(result.status).json({ message: result.message });
     }
-
-    const user = await User.findOne({
-      $or: [{ email: data.validate }, { mobileNo: data.validate }],
-    });
-
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
-    }
-
-    const userResponse = hidePassword(user);
 
     const token = generateToken({
       id: user._id,
@@ -70,9 +58,9 @@ export const verifyOtp = async (req, res) => {
       role: user.role,
     });
 
-    return res.status(200).json({
-      message: 'OTP verified successfully',
-      data: userResponse,
+    return res.status(result.status).json({
+      message: result.message,
+      data: result.data,
       token,
     });
   } catch (error) {

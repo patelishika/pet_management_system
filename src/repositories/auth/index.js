@@ -13,7 +13,15 @@ export const createUser = async (data) => {
   return user;
 };
 
-export const createOtp = async (validate, value) => {
-  const otp = await Otp.create({ validate, value });
+export const createOtp = async (identifier, value) => {
+  const otp = await Otp.create({ identifier, value });
+  return otp;
+};
+
+export const isIdentifierExist = async (identifier) => {
+  const otp = await Otp.findOne({
+    identifier: identifier,
+  });
+
   return otp;
 };

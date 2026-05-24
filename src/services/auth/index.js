@@ -4,6 +4,7 @@ import {
   createOtp,
   createUser,
   isEmailOrMoblieNoExist,
+  isIdentifierExist,
 } from '../../repositories/auth/index.js';
 import { generateOtp } from '../../utils/otp.js';
 import { hashPassword } from '../../utils/password.js';
@@ -36,5 +37,36 @@ export const signUpService = async (data) => {
     message: 'User register Successfully',
     status: 201,
     data: user,
+  };
+};
+
+export const verifyOtpService = async (data) => {
+  const otpRecord = await isIdentifierExist(data.identifier);
+
+  if (!otpRecord || otpRecord.value !== data.value) {
+    return {
+      success: false,
+      message: 'Invalid otp',
+      status: 400,
+    };
+  }
+
+  const user = await isEmailOrMoblieNoExist(data.email, data.mobileNo);
+
+  if (!user) {
+    return {
+      success: false,
+      message: 'User not found',
+      status: 400,
+    };
+  }
+
+  const userResponse = hidePassword(user);
+
+  return {
+    success: true,
+    message: 'Otp verified successfully',
+    status: 200,
+    data: userResponse,
   };
 };

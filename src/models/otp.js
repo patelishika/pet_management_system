@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const otpSchema = new mongoose.Schema({
-  validate: {
+  identifier: {
     type: String,
     required: true,
   },

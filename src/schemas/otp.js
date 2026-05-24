@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const otpSchema = z.object({
-  validate: z.union([
+  identifier: z.union([
     z.string().email().trim(),
     z.string().regex(/^[0-9]{10}$/, 'Invalid mobile number'),
   ]),
