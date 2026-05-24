@@ -1,7 +1,7 @@
 import { Otp } from '../../models/otp.js';
 import { User } from '../../models/user.js';
 
-export const isEmailOrMoblieNoExist = async (email, mobileNo) => {
+export const isEmailOrMobileExist = async (email, mobileNo) => {
   const user = await User.findOne({
     $or: [{ email: email }, { mobileNo: mobileNo }],
   });

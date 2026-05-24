@@ -19,13 +19,13 @@ export const getPetService = async (id) => {
   };
 };
 
-export const deletePetService = async (id) => {
-  const pet = await deletePetById(id);
+export const deletePetService = async (petId, userId) => {
+  const pet = await deletePetById(petId, userId);
 
   if (!pet) {
     return {
       success: false,
-      message: 'Pet not found',
+      message: 'Pet not found or access denied',
       status: 404,
     };
   }

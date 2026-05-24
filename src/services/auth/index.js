@@ -3,14 +3,14 @@ import { User } from '../../models/user.js';
 import {
   createOtp,
   createUser,
-  isEmailOrMoblieNoExist,
+  isEmailOrMobileExist,
   isIdentifierExist,
 } from '../../repositories/auth/index.js';
 import { generateOtp } from '../../utils/otp.js';
-import { hashPassword } from '../../utils/password.js';
+import { hashPassword, hidePassword, verifyPassword } from '../../utils/password.js';
 
 export const signUpService = async (data) => {
-  const isUserExist = await isEmailOrMoblieNoExist(data.email, data.mobileNo);
+  const isUserExist = await isEmailOrMobileExist(data.email, data.mobileNo);
 
   if (isUserExist) {
     return {
@@ -51,7 +51,7 @@ export const verifyOtpService = async (data) => {
     };
   }
 
-  const user = await isEmailOrMoblieNoExist(data.email, data.mobileNo);
+  const user = await isEmailOrMobileExist(data.email, data.mobileNo);
 
   if (!user) {
     return {
@@ -72,7 +72,7 @@ export const verifyOtpService = async (data) => {
 };
 
 export const signInService = async (data) => {
-  const user = await isEmailOrMoblieNoExist(data.email, data.mobileNo);
+  const user = await isEmailOrMobileExist(data.email, data.mobileNo);
 
   if (!user) {
     return {

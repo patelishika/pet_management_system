@@ -56,10 +56,10 @@ export const verifyOtp = async (req, res) => {
     }
 
     const token = generateToken({
-      id: user._id,
-      email: user.email,
-      mobileNo: user.mobileNo,
-      role: user.role,
+      id: result.data._id,
+      email: result.data.email,
+      mobileNo: result.data.mobileNo,
+      role: result.data.role,
     });
 
     return res.status(result.status).json({
@@ -88,10 +88,10 @@ export const signIn = async (req, res) => {
     }
 
     const token = generateToken({
-      id: user._id,
-      email: user.email,
-      mobileNo: user.mobileNo,
-      role: user.role,
+      id: result.data._id,
+      email: result.data.email,
+      mobileNo: result.data.mobileNo,
+      role: result.data.role,
     });
 
     return res

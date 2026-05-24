@@ -1,14 +1,14 @@
 import {
   findAndDeleteAccount,
-  findAndDeleteAllUsers,
+  deleteUserss,
   findAndUpdateUser,
   findUserById,
-  userPaginate,
+  findUserByPaginate,
 } from '../../repositories/user/index.js';
 import { hidePassword } from '../../utils/password.js';
 
 export const getAllUsersService = async (page, limit, sortBy, order) => {
-  const users = await userPaginate(page, limit, sortBy, order);
+  const users = await findUserByPaginate(page, limit, sortBy, order);
 
   return {
     success: true,
@@ -78,7 +78,7 @@ export const deleteUserService = async (userId) => {
 };
 
 export const deleteAllUsersService = async () => {
-  const users = await findAndDeleteAllUsers();
+  const users = await deleteUserss();
 
   return {
     success: true,

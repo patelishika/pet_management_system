@@ -19,7 +19,7 @@ export const protect = (role = 'USER') => {
 
     req.user = decodeToken.payload;
 
-    if (req.user.role !== role) {
+    if (req.user.role !== 'SUPER_ADMIN' && req.user.role !== role) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 

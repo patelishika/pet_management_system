@@ -23,11 +23,13 @@ export const getPet = async (req, res) => {
 export const deletePet = async (req, res) => {
   try {
     const { data, success, error } = paramSchema.safeParse(req.params);
+    const userId = req.user.id;
+
     if (!success) {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    const result = await deletePetService(data.id);
+    const result = await deletePetService(data.id, userId);
     if (!result.success) {
       return res.status(result.status).json({ message: result.message });
     }

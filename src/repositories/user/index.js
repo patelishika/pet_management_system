@@ -1,6 +1,6 @@
 import { User } from '../../models/user.js';
 
-export const userPaginate = async (page, limit, sortBy, order) => {
+export const findUserByPaginate = async (page, limit, sortBy, order) => {
   const users = await User.paginate(
     {},
     {
@@ -34,7 +34,7 @@ export const findAndDeleteAccount = async (userId) => {
   return user;
 };
 
-export const findAndDeleteAllUsers = async () => {
+export const deleteUserss = async () => {
   const users = await User.deleteMany({});
   return users;
 };

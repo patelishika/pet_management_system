@@ -1,4 +1,4 @@
-import { findPetById, placeOrder } from '../../repositories/order/index.js';
+import { findPetById, createOrder } from '../../repositories/order/index.js';
 
 export const createOrderService = async (petId, userId) => {
   const pet = await findPetById(petId);
@@ -11,11 +11,11 @@ export const createOrderService = async (petId, userId) => {
     };
   }
 
-  const order = await placeOrder(userId, pet.id, pet.owner);
+  const order = await createOrder(userId, pet.id, pet.owner);
 
   return {
     success: true,
-    message: 'Order placed succesfully',
+    message: 'Order placed successfully',
     status: 200,
     data: order,
   };
