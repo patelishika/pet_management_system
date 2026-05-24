@@ -1,6 +1,7 @@
 import {
   findAndDeleteAccount,
   findAndUpdateUser,
+  findUserById,
   userPaginate,
 } from '../../repositories/user/index.js';
 import { hidePassword } from '../../utils/password.js';
@@ -13,6 +14,27 @@ export const getAllUsersService = async (page, limit, sortBy, order) => {
     message: 'Users fetched successfully',
     status: 200,
     data: users,
+  };
+};
+
+export const getUserService = async (userId) => {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    return {
+      success: false,
+      message: 'User not found',
+      status: 400,
+    };
+  }
+
+  const userResponse = hidePassword(user);
+
+  return {
+    success: true,
+    message: 'User fetched successfully',
+    status: 200,
+    data: userResponse,
   };
 };
 

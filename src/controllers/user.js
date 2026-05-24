@@ -3,6 +3,7 @@ import { updateUserSchema } from '../schemas/user.js';
 import {
   deleteUserService,
   getAllUsersService,
+  getUserService,
   updateUserService,
 } from '../services/user/index.js';
 import { paramSchema } from '../schemas/params.js';
@@ -22,6 +23,28 @@ export const getAllUsers = async (req, res) => {
     });
   } catch (error) {
     console.log('get all user error: ', error);
+    return res.status(500).json({ message: 'Internal server error', error: error });
+  }
+};
+
+export const getUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const result = await getUserService(userId);
+
+    if (!result) {
+      return res.status(result.status).json({
+        message: result.message,
+      });
+    }
+
+    return res.status(result.status).json({
+      message: result.message,
+      data: result.data,
+    });
+  } catch (error) {
+    console.log('get user error: ', error);
     return res.status(500).json({ message: 'Internal server error', error: error });
   }
 };

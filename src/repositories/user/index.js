@@ -16,6 +16,11 @@ export const userPaginate = async (page, limit, sortBy, order) => {
   return users;
 };
 
+export const findUserById = async (userId) => {
+  const user = await User.findById(userId);
+  return user;
+};
+
 export const findAndUpdateUser = async (data, userId) => {
   const user = await User.findByIdAndUpdate(userId, data, {
     new: true,
