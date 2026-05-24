@@ -23,3 +23,8 @@ export const findAndUpdateUser = async (data, userId) => {
 
   return user;
 };
+
+export const findAndDeleteAccount = async (userId) => {
+  const user = await User.findByIdAndDelete(userId);
+  return user;
+};

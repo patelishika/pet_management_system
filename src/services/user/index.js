@@ -1,4 +1,8 @@
-import { findAndUpdateUser, userPaginate } from '../../repositories/user/index.js';
+import {
+  findAndDeleteAccount,
+  findAndUpdateUser,
+  userPaginate,
+} from '../../repositories/user/index.js';
 import { hidePassword } from '../../utils/password.js';
 
 export const getAllUsersService = async (page, limit, sortBy, order) => {
@@ -15,11 +19,37 @@ export const getAllUsersService = async (page, limit, sortBy, order) => {
 export const updateUserService = async (data, userId) => {
   const user = await findAndUpdateUser(data, userId);
 
+  if (!user) {
+    return {
+      success: false,
+      message: 'User not found',
+      status: 400,
+    };
+  }
+
   const userResponse = hidePassword(user);
   return {
     success: true,
     message: 'Users updated successfully',
     status: 200,
     data: userResponse,
+  };
+};
+
+export const deleteUserService = async (userId) => {
+  const user = await findAndDeleteAccount(userId);
+
+  if (!user) {
+    return {
+      success: false,
+      message: 'User not found',
+      status: 400,
+    };
+  }
+
+  return {
+    success: true,
+    message: 'User deleted successfully',
+    status: 200,
   };
 };
