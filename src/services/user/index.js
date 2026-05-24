@@ -25,7 +25,7 @@ export const getUserService = async (userId) => {
     return {
       success: false,
       message: 'User not found',
-      status: 400,
+      status: 404,
     };
   }
 
@@ -46,7 +46,7 @@ export const updateUserService = async (data, userId) => {
     return {
       success: false,
       message: 'User not found',
-      status: 400,
+      status: 404,
     };
   }
 
@@ -66,7 +66,7 @@ export const deleteUserService = async (userId) => {
     return {
       success: false,
       message: 'User not found',
-      status: 400,
+      status: 404,
     };
   }
 

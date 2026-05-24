@@ -34,7 +34,7 @@ export const getUser = async (req, res) => {
 
     const result = await getUserService(userId);
 
-    if (!result) {
+    if (!result.success) {
       return res.status(result.status).json({
         message: result.message,
       });
@@ -62,7 +62,7 @@ export const updateUser = async (req, res) => {
 
     const result = await updateUserService(data, userId);
 
-    if (!result) {
+    if (!result.success) {
       return res.status(result.status).json({
         message: result.message,
       });
@@ -84,7 +84,7 @@ export const deleteUser = async (req, res) => {
 
     const result = await deleteUserService(userId);
 
-    if (!result) {
+    if (!result.success) {
       return res.status(result.status).json({
         message: result.message,
       });

@@ -57,7 +57,7 @@ export const verifyOtpService = async (data) => {
     return {
       success: false,
       message: 'User not found',
-      status: 400,
+      status: 404,
     };
   }
 
@@ -78,7 +78,7 @@ export const signInService = async (data) => {
     return {
       success: false,
       message: 'User not found',
-      status: 400,
+      status: 404,
     };
   }
 
@@ -88,7 +88,7 @@ export const signInService = async (data) => {
     return {
       success: false,
       message: 'Invalid password',
-      status: 400,
+      status: 401,
     };
   }
 
