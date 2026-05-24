@@ -6,7 +6,11 @@ import { generateToken } from '../utils/token.js';
 import { otpSchema } from '../schemas/otp.js';
 import { generateOtp } from '../utils/otp.js';
 import { hashPassword, hidePassword, verifyPassword } from '../utils/password.js';
-import { signUpService, verifyOtpService } from '../services/auth/index.js';
+import {
+  signInService,
+  signUpService,
+  verifyOtpService,
+} from '../services/auth/index.js';
 
 export const signUp = async (req, res) => {
   try {
@@ -77,21 +81,11 @@ export const signIn = async (req, res) => {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    const user = await User.findOne({
-      $or: [{ email: data.email }, { mobileNo: data.mobileNo }],
-    });
+    const result = await signInService(data);
 
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
+    if (!result.success) {
+      return res.status(result.status).json({ message: result.message });
     }
-
-    const isPasswordValid = await verifyPassword(data.password, user.password);
-
-    if (!isPasswordValid) {
-      return res.status(400).json({ message: 'Invalid password' });
-    }
-
-    const userResponse = hidePassword(user);
 
     const token = generateToken({
       id: user._id,
@@ -101,8 +95,8 @@ export const signIn = async (req, res) => {
     });
 
     return res
-      .status(200)
-      .json({ message: 'Login successfully', data: userResponse, token });
+      .status(result.status)
+      .json({ message: result.message, data: result.data, token });
   } catch (error) {
     console.log('sign in error: ', error);
     return res.status(500).json({ message: 'Internal server error', error: error });

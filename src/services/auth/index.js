@@ -70,3 +70,34 @@ export const verifyOtpService = async (data) => {
     data: userResponse,
   };
 };
+
+export const signInService = async (data) => {
+  const user = await isEmailOrMoblieNoExist(data.email, data.mobileNo);
+
+  if (!user) {
+    return {
+      success: false,
+      message: 'User not found',
+      status: 400,
+    };
+  }
+
+  const isPasswordValid = await verifyPassword(data.password, user.password);
+
+  if (!isPasswordValid) {
+    return {
+      success: false,
+      message: 'Invalid password',
+      status: 400,
+    };
+  }
+
+  const userResponse = hidePassword(user);
+
+  return {
+    success: true,
+    message: 'Login successfully',
+    status: 200,
+    data: userResponse,
+  };
+};
