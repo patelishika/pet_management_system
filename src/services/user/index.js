@@ -1,5 +1,6 @@
 import {
   findAndDeleteAccount,
+  findAndDeleteAllUsers,
   findAndUpdateUser,
   findUserById,
   userPaginate,
@@ -72,6 +73,16 @@ export const deleteUserService = async (userId) => {
   return {
     success: true,
     message: 'User deleted successfully',
+    status: 200,
+  };
+};
+
+export const deleteAllUsersService = async () => {
+  const users = await findAndDeleteAllUsers();
+
+  return {
+    success: true,
+    message: 'Users deleted successfully',
     status: 200,
   };
 };

@@ -33,3 +33,8 @@ export const findAndDeleteAccount = async (userId) => {
   const user = await User.findByIdAndDelete(userId);
   return user;
 };
+
+export const findAndDeleteAllUsers = async () => {
+  const users = await User.deleteMany({});
+  return users;
+};

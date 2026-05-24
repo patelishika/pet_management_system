@@ -1,6 +1,7 @@
 import { User } from '../models/user.js';
 import { updateUserSchema } from '../schemas/user.js';
 import {
+  deleteAllUsersService,
   deleteUserService,
   getAllUsersService,
   getUserService,
@@ -95,5 +96,19 @@ export const deleteUser = async (req, res) => {
   } catch (error) {
     console.log('delete account error: ', error);
     return res.status(500).json({ message: 'Internal server error', error: error });
+  }
+};
+
+export const deleteAllUsers = async (req, res) => {
+  try {
+    const result = await deleteAllUsersService();
+
+    return res.status(result.status).json({
+      message: result.message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
   }
 };
