@@ -1,4 +1,4 @@
-export const ROLES = ['USER', 'ADMIN', 'SUPERADMIN'];
+export const ROLES = ['USER', 'ADMIN', 'SUPER_ADMIN'];
 
 export const REQUEST_STATUS = ['UNAPPROVED', 'APPROVED'];
 
