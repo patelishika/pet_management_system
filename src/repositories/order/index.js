@@ -1,0 +1,16 @@
+import { Order } from '../../models/order.js';
+import { Pet } from '../../models/pet.js';
+
+export const findPetById = async (id) => {
+  const pet = await Pet.findById(id);
+  return pet;
+};
+
+export const placeOrder = async (userId, petId, ownerId) => {
+  const order = await Order.create({
+    pet: petId,
+    seller: ownerId,
+    buyer: userId,
+  });
+  return order;
+};
