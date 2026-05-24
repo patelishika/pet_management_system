@@ -1,5 +1,6 @@
 import { User } from '../models/user.js';
-import { getAllUsersService } from '../services/user/index.js';
+import { updateUserSchema } from '../schemas/user.js';
+import { getAllUsersService, updateUserService } from '../services/user/index.js';
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -22,19 +23,22 @@ export const getAllUsers = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
+    const { data, success, error } = updateUserSchema.safeParse(req.body);
+
+    if (!success) {
+      return res.status(400).json({ message: 'Invalid request', error: error });
+    }
+
     const userId = req.user.id;
 
-    const user = await User.findByIdAndUpdate(userId, req.body, {
-      new: true,
-    });
+    const result = await updateUserService(data, userId);
 
-    return res.status(200).json({
-      message: 'User upadated successfully',
-      data: user,
+    return res.status(result.status).json({
+      message: result.message,
+      data: result.data,
     });
   } catch (error) {
     console.log('Update user error: ', error);
-
     return res.status(500).json({ message: 'Internal server error', error: error });
   }
 };

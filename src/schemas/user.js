@@ -32,3 +32,11 @@ export const loginSchema = z.object({
     .max(10, 'Password must not exceed character')
     .trim(),
 });
+
+export const updateUserSchema = z.object({
+  name: z
+    .string()
+    .min(2, 'Name must be atleast 2 character')
+    .max(15, 'Name must not exceed 10 character')
+    .trim(),
+});

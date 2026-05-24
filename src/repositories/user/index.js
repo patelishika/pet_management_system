@@ -15,3 +15,11 @@ export const userPaginate = async (page, limit, sortBy, order) => {
 
   return users;
 };
+
+export const findAndUpdateUser = async (data, userId) => {
+  const user = await User.findByIdAndUpdate(userId, data, {
+    new: true,
+  });
+
+  return user;
+};
