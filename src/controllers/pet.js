@@ -1,9 +1,82 @@
 import { paramSchema } from '../schemas/params.js';
+import { petSchema } from '../schemas/pet.js';
 import {
+  approvePetService,
+  createPetService,
   deletePetService,
   getAllPetsService,
+  getPendingPetsService,
   getPetService,
 } from '../services/pet/index.js';
+
+export const createPet = async (req, res) => {
+  try {
+    const { data, success, error } = petSchema.safeParse(req.body);
+    const files = req.files;
+    const userId = req.user.id;
+
+    if (!success) {
+      return res.status(400).json({ message: 'Invalid request', error: error });
+    }
+
+    if (!files || files.length === 0) {
+      return res.status(400).json({
+        message: 'Please upload at least one image',
+      });
+    }
+
+    const result = await createPetService(data, userId, files);
+    if (!result.success) {
+      return res.status(result.status).json({ message: result.message });
+    }
+
+    return res.status(result.status).json({ message: result.message });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error: error });
+  }
+};
+
+export const getPendingPets = async (req, res) => {
+  try {
+    const result = await getPendingPetsService();
+
+    if (!result.success) {
+      return res.status(result.status).json({ message: result.message });
+    }
+
+    return res
+      .status(result.status)
+      .json({ message: result.message, data: result.data });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Internal server error',
+    });
+  }
+};
+
+export const approvePet = async (req, res) => {
+  try {
+    const { data, success, error } = paramSchema.safeParse(req.params);
+
+    if (!success) {
+      return res.status(400).json({ message: 'Invalid request', error: error });
+    }
+
+    const result = await approvePetService(data.id);
+
+    if (!result.success) {
+      return res.status(result.status).json({ message: result.message });
+    }
+
+    return res
+      .status(result.status)
+      .json({ message: result.message, data: result.data });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Internal server error',
+    });
+  }
+};
 
 export const getPet = async (req, res) => {
   try {
@@ -19,7 +92,9 @@ export const getPet = async (req, res) => {
       return res.status(result.status).json({ message: result.message });
     }
 
-    return res.status(200).json({ message: result.message, data: result.data });
+    return res
+      .status(result.status)
+      .json({ message: result.message, data: result.data });
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error: error });
   }
@@ -53,7 +128,7 @@ export const deletePet = async (req, res) => {
       return res.status(result.status).json({ message: result.message });
     }
 
-    return res.status(200).json({ message: result.message });
+    return res.status(result.status).json({ message: result.message });
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error: error });
   }

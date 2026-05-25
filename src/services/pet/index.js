@@ -1,8 +1,59 @@
 import {
+  approvePet,
+  createPet,
   deletePetById,
   getAllPets,
+  getPendingPets,
   getPetById,
 } from '../../repositories/pet/index.js';
+
+export const createPetService = async (data, userId, files) => {
+  const pet = await createPet(data, userId, files);
+
+  return {
+    success: true,
+    message: 'Pet send to approval',
+    status: 200,
+  };
+};
+
+export const getPendingPetsService = async () => {
+  const pets = await getPendingPets();
+
+  if (!pets) {
+    return {
+      success: false,
+      message: 'Pet not found',
+      status: 404,
+    };
+  }
+
+  return {
+    success: true,
+    message: 'Pet fetched successfully',
+    status: 200,
+    data: pet,
+  };
+};
+
+export const approvePetService = async (id) => {
+  const pet = await approvePet(id);
+
+  if (!pet) {
+    return {
+      success: false,
+      message: 'Pet not found',
+      status: 404,
+    };
+  }
+
+  return {
+    success: true,
+    message: 'Pet updated successfully',
+    status: 200,
+    data: pet,
+  };
+};
 
 export const getPetService = async (petId, userId) => {
   const pet = await getPetById(petId);
