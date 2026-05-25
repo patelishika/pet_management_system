@@ -5,6 +5,7 @@ import {
   getAllPets,
   getPendingPets,
   getPetById,
+  updatePetById,
 } from '../../repositories/pet/index.js';
 
 export const createPetService = async (data, userId, files) => {
@@ -110,6 +111,43 @@ export const getAllPetsService = async (userId) => {
     message: 'Pets fetched successfully',
     status: 200,
     data: visiblePets,
+  };
+};
+
+export const updatePetService = async (petId, userId, data) => {
+  const pet = await getPetById(petId);
+
+  if (!pet) {
+    return {
+      success: false,
+      message: 'Pet not found',
+      status: 404,
+    };
+  }
+
+  if (pet.ownerId.toString() !== userId.toString()) {
+    return {
+      success: false,
+      message: 'You are not authorized to update this pet',
+      status: 403,
+    };
+  }
+
+  if (pet.status === 'SOLD') {
+    return {
+      success: false,
+      message: 'Sold pet cannot be updated',
+      status: 400,
+    };
+  }
+
+  const updatedPet = await updatePetById(petId, { ...data, status: 'UNAPPROVED' });
+
+  return {
+    success: true,
+    message: 'Pet updated successfully',
+    status: 200,
+    data: updatedPet,
   };
 };
 

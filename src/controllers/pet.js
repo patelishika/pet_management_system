@@ -7,6 +7,7 @@ import {
   getAllPetsService,
   getPendingPetsService,
   getPetService,
+  updatePetService,
 } from '../services/pet/index.js';
 
 export const createPet = async (req, res) => {
@@ -105,6 +106,30 @@ export const getAllPets = async (req, res) => {
     const userId = req.user.id;
 
     const result = await getAllPetsService(userId);
+
+    return res
+      .status(result.status)
+      .json({ message: result.message, data: result.data });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error: error });
+  }
+};
+
+export const updatePet = async (req, res) => {
+  try {
+    const { data, success, error } = petSchema.safeParse(req.body);
+    const userId = req.user.id;
+    const petId = req.params.id;
+
+    if (!success) {
+      return res.status(400).json({ message: 'Invalid request', error: error });
+    }
+
+    const result = await updatePetService(petId, userId, data);
+
+    if (!result.success) {
+      return res.status(result.status).json({ message: result.message });
+    }
 
     return res
       .status(result.status)

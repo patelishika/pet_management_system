@@ -40,6 +40,11 @@ export const getAllPets = async () => {
   return pets;
 };
 
+export const updatePetById = async (petId, data) => {
+  const updatedPet = await Pet.findByIdAndUpdate(petId, data, { new: true });
+  return updatedPet;
+};
+
 export const deletePetById = async (petId, userId) => {
   const pet = await Pet.findByIdAndDelete({ id: petId, owner: userId });
   return pet;
