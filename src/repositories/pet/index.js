@@ -1,7 +1,7 @@
 import { Pet } from '../../models/pet.js';
 
-export const getPetById = async (id) => {
-  const pet = await Pet.findById(id);
+export const getPetById = async (petId) => {
+  const pet = await Pet.findById(petId);
   return pet;
 };
 

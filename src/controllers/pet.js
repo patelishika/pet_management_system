@@ -4,12 +4,13 @@ import { deletePetService, getPetService } from '../services/pet/index.js';
 export const getPet = async (req, res) => {
   try {
     const { data, success, error } = paramSchema.safeParse(req.params);
+    const userId = req.user.id;
 
     if (!success) {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    const result = await getPetService(data.id);
+    const result = await getPetService(data.id, userId);
     if (!result.success) {
       return res.status(result.status).json({ message: result.message });
     }
