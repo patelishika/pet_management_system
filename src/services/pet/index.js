@@ -1,4 +1,8 @@
-import { deletePetById, getPetById } from '../../repositories/pet/index.js';
+import {
+  deletePetById,
+  getAllPets,
+  getPetById,
+} from '../../repositories/pet/index.js';
 
 export const getPetService = async (petId, userId) => {
   const pet = await getPetById(petId);
@@ -34,6 +38,27 @@ export const getPetService = async (petId, userId) => {
     message: 'Pet fetched successfully',
     status: 200,
     data: pet,
+  };
+};
+
+export const getAllPetsService = async (userId) => {
+  const pets = await getAllPets();
+
+  const visiblePets = pets.filter((pet) => {
+    if (pet.owner.toString() === userId) {
+      return true;
+    }
+
+    if (pet.status === 'APPROVED' && pet.status !== 'SOLD') {
+      return true;
+    }
+  });
+
+  return {
+    success: true,
+    message: 'Pets fetched successfully',
+    status: 200,
+    data: visiblePets,
   };
 };
 

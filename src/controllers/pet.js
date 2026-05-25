@@ -1,5 +1,9 @@
 import { paramSchema } from '../schemas/params.js';
-import { deletePetService, getPetService } from '../services/pet/index.js';
+import {
+  deletePetService,
+  getAllPetsService,
+  getPetService,
+} from '../services/pet/index.js';
 
 export const getPet = async (req, res) => {
   try {
@@ -16,6 +20,20 @@ export const getPet = async (req, res) => {
     }
 
     return res.status(200).json({ message: result.message, data: result.data });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error: error });
+  }
+};
+
+export const getAllPets = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const result = await getAllPetsService(userId);
+
+    return res
+      .status(result.status)
+      .json({ message: result.message, data: result.data });
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error: error });
   }
