@@ -53,7 +53,7 @@ const petSchema = new mongoose.Schema(
       default: 'UNAPPROVED',
     },
     images: {
-      type: String,
+      type: [String],
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,

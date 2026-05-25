@@ -20,5 +20,5 @@ export const petSchema = z.object({
     .trim()
     .optional(),
   price: z.number().positive().trim(),
-  image: z.image(),
+  image: z.string(),
 });
