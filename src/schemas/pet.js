@@ -19,6 +19,5 @@ export const petSchema = z.object({
     .max(15, 'Color must not exceed 15 character')
     .trim()
     .optional(),
-  price: z.number().positive(),
-  image: z.string(),
+  price: z.coerce.number().positive(),
 });

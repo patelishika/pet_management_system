@@ -1,3 +1,4 @@
+import { ar } from 'zod/locales';
 import { paramSchema } from '../schemas/params.js';
 import { petSchema } from '../schemas/pet.js';
 import {
@@ -13,18 +14,23 @@ import {
 export const createPet = async (req, res) => {
   try {
     const { data, success, error } = petSchema.safeParse(req.body);
-    const files = req.files;
+
+    const rawFiles = req.files;
     const userId = req.user.id;
 
     if (!success) {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    if (!files || files.length === 0) {
+    if (!rawFiles || rawFiles.length === 0) {
       return res.status(400).json({
         message: 'Please upload at least one image',
       });
     }
+
+    const files = rawFiles.map((file) => {
+      return file.filename;
+    });
 
     const result = await createPetService(data, userId, files);
     if (!result.success) {

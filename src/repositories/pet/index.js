@@ -2,7 +2,7 @@ import { Pet } from '../../models/pet.js';
 
 export const createPet = async (data, userId, files) => {
   const pet = await Pet.create({
-    data,
+    ...data,
     owner: userId,
     images: files,
   });

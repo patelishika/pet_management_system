@@ -14,8 +14,8 @@ import { upload } from '../middlewares/multer.js';
 const router = Router();
 
 router.post('/', protect(), upload.array('images', 10), createPet);
-router.get('/admin/pending-pets', protect('ADMIN'), getPendingPets);
-router.patch('/admin/approve-pet/:id', protect('ADMIN'), approvePet);
+router.get('/pending', protect('ADMIN'), getPendingPets);
+router.patch('/approve/:id', protect('ADMIN'), approvePet);
 router.get('/:id', protect(), getPet);
 router.get('/', protect(), getAllPets);
 router.put('/:id', protect(), updatePet);
