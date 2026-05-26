@@ -32,9 +32,7 @@ export const signUp = async (req, res) => {
       return res.status(result.status).json({ message: result.message });
     }
 
-    return res
-      .status(result.status)
-      .json({ message: result.message, data: result.data });
+    return res.status(result.status).json({ message: result.message });
   } catch (error) {
     console.log('sign up error: ', error);
     return res.status(500).json({ message: 'Internal server error', error: error });

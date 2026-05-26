@@ -53,12 +53,11 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { data, success, error } = updateUserSchema.safeParse(req.body);
+    const userId = req.user.id;
 
     if (!success) {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
-
-    const userId = req.user.id;
 
     const result = await updateUserService(data, userId);
 

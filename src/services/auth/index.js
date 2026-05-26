@@ -24,6 +24,8 @@ export const signUpService = async (data) => {
 
   const user = await createUser({ ...data, password: hashedPassword });
 
+  const userResponse = hidePassword(user);
+
   const otp = generateOtp();
 
   if (data.email) {
@@ -36,7 +38,6 @@ export const signUpService = async (data) => {
     success: true,
     message: 'User register Successfully',
     status: 201,
-    data: user,
   };
 };
 

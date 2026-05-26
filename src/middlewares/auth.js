@@ -3,10 +3,12 @@ import { verifyToken } from '../utils/token.js';
 
 export const protect = (role = 'USER') => {
   return (req, res, next) => {
-    const authHeader = req.header.authorization;
+    const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startswith('Bearer')) {
-      return res.status(401).json({ message: 'Unauthorized' });
+    // console.log(authHeader)
+
+    if (!authHeader || !authHeader.startsWith('Bearer')) {
+      return res.status(401).json({ message: 'auth header Unauthorized' });
     }
 
     const token = authHeader.split(' ')[1];
@@ -14,7 +16,7 @@ export const protect = (role = 'USER') => {
     const decodeToken = verifyToken(token);
 
     if (!decodeToken.success) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: 'decode Unauthorized' });
     }
 
     req.user = decodeToken.payload;
