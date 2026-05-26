@@ -14,3 +14,8 @@ export const createOrder = async (userId, petId, ownerId) => {
   });
   return order;
 };
+
+export const getOrderById = async (id) => {
+  const order = await Order.findById(id);
+  return order;
+};

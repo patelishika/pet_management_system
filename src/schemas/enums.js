@@ -14,3 +14,5 @@ export const PET_CATEGORY = [
   'COW',
   'OTHER',
 ];
+
+export const ORDER_STATUS = ['PLACED', 'CANCELLED'];
