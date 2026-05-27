@@ -6,12 +6,8 @@ export const findPetById = async (id) => {
   return pet;
 };
 
-export const createOrder = async (userId, petId, ownerId) => {
-  const order = await Order.create({
-    pet: petId,
-    seller: ownerId,
-    buyer: userId,
-  });
+export const createOrder = async (data) => {
+  const order = await Order.create(data);
   return order;
 };
 

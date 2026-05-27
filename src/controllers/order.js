@@ -4,13 +4,12 @@ import { paramSchema } from '../schemas/params.js';
 export const createOrder = async (req, res) => {
   try {
     const { data, success, error } = orderSchema.safeParse(req.params);
-    const userId = req.user.id;
 
     if (!success) {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    const result = await createOrderService(data.id, userId);
+    const result = await createOrderService({ petId: data.id, userId: req.user.id });
 
     if (!result.success) {
       return res.status(result.status).json({ message: result.message });
@@ -27,13 +26,15 @@ export const createOrder = async (req, res) => {
 export const cancelOrder = async (req, res) => {
   try {
     const { data, success, error } = paramSchema.safeParse(req.params);
-    const userId = req.user.id;
 
     if (!success) {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    const result = await cancelOrderService(data.id, userId);
+    const result = await cancelOrderService({
+      orderId: data.id,
+      userId: req.user.id,
+    });
     if (!result.success) {
       return res.status(result.status).json({ message: result.message });
     }

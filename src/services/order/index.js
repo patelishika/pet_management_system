@@ -4,8 +4,8 @@ import {
   getOrderById,
 } from '../../repositories/order/index.js';
 
-export const createOrderService = async (petId, userId) => {
-  const pet = await findPetById(petId);
+export const createOrderService = async (data) => {
+  const pet = await findPetById(data.petId);
 
   if (!pet) {
     return {
@@ -15,7 +15,12 @@ export const createOrderService = async (petId, userId) => {
     };
   }
 
-  const order = await createOrder(userId, pet.id, pet.owner);
+  delete data.petId;
+
+  data.pet = pet.id;
+  data.seller = pet.owner;
+
+  const order = await createOrder(data);
 
   return {
     success: true,
@@ -25,8 +30,8 @@ export const createOrderService = async (petId, userId) => {
   };
 };
 
-export const cancelOrderService = async (orderId, userId) => {
-  const order = await getOrderById(orderId);
+export const cancelOrderService = async (data) => {
+  const order = await getOrderById(data.orderId);
 
   if (!order) {
     return {
@@ -36,7 +41,7 @@ export const cancelOrderService = async (orderId, userId) => {
     };
   }
 
-  if (order.buyer.toString() !== userId) {
+  if (order.buyer.toString() !== data.userId) {
     return {
       success: false,
       message: 'Unauthorized',

@@ -61,8 +61,8 @@ export const approvePetService = async (id) => {
   };
 };
 
-export const getPetService = async (petId, userId) => {
-  const pet = await getPetById(petId);
+export const getPetService = async (data) => {
+  const pet = await getPetById(data.petId);
 
   if (!pet) {
     return {
@@ -72,7 +72,7 @@ export const getPetService = async (petId, userId) => {
     };
   }
 
-  const isOwner = pet.owner.toString() === userId;
+  const isOwner = pet.owner.toString() === data.userId;
 
   if (isOwner) {
     return {
@@ -119,7 +119,7 @@ export const getAllPetsService = async (userId) => {
   };
 };
 
-export const updatePetService = async (petId, userId, data) => {
+export const updatePetService = async ({ petId, userId, data }) => {
   const pet = await getPetById(petId);
 
   if (!pet) {
