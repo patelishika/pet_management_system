@@ -1,11 +1,7 @@
 import { Pet } from '../../models/pet.js';
 
-export const createPet = async (data, userId, files) => {
-  const pet = await Pet.create({
-    ...data,
-    owner: userId,
-    images: files,
-  });
+export const createPet = async (data) => {
+  const pet = await Pet.create(data);
 
   return pet;
 };

@@ -8,26 +8,31 @@ import {
   updatePetById,
 } from '../../repositories/pet/index.js';
 
-export const createPetService = async (data, userId, files) => {
-  const pet = await createPet(data, userId, files);
+export const createPetService = async (data) => {
+  if (!data.images || data.images.length === 0) {
+    return res.status(400).json({
+      message: 'Please upload at least one image',
+    });
+  }
+
+  const files = data.images.map((file) => {
+    return file.filename;
+  });
+
+  data.images = files;
+
+  const pet = await createPet(data);
 
   return {
     success: true,
     message: 'Pet send to approval',
     status: 200,
+    data: pet,
   };
 };
 
 export const getPendingPetsService = async () => {
   const pets = await getPendingPets();
-
-  if (!pets) {
-    return {
-      success: false,
-      message: 'Pet not found',
-      status: 404,
-    };
-  }
 
   return {
     success: true,
@@ -69,7 +74,7 @@ export const getPetService = async (petId, userId) => {
 
   const isOwner = pet.owner.toString() === userId;
 
-  if (isowner) {
+  if (isOwner) {
     return {
       success: true,
       message: 'Pet fetched successfully',
@@ -78,7 +83,7 @@ export const getPetService = async (petId, userId) => {
     };
   }
 
-  if (pet.status !== 'APPROVED' || pet.status == 'SOLD') {
+  if (pet.status !== 'APPROVED') {
     return {
       success: false,
       message: 'Pet not found',
@@ -101,7 +106,7 @@ export const getAllPetsService = async (userId) => {
       return true;
     }
 
-    if (pet.status === 'APPROVED' && pet.status !== 'SOLD') {
+    if (pet.status === 'APPROVED') {
       return true;
     }
   });

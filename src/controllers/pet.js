@@ -15,29 +15,22 @@ export const createPet = async (req, res) => {
   try {
     const { data, success, error } = petSchema.safeParse(req.body);
 
-    const rawFiles = req.files;
-    const userId = req.user.id;
-
     if (!success) {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    if (!rawFiles || rawFiles.length === 0) {
-      return res.status(400).json({
-        message: 'Please upload at least one image',
-      });
-    }
-
-    const files = rawFiles.map((file) => {
-      return file.filename;
+    const result = await createPetService({
+      ...data,
+      owner: req.user.id,
+      images: req.files,
     });
-
-    const result = await createPetService(data, userId, files);
     if (!result.success) {
       return res.status(result.status).json({ message: result.message });
     }
 
-    return res.status(result.status).json({ message: result.message });
+    return res
+      .status(result.status)
+      .json({ message: result.message, data: result.data });
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error: error });
   }
