@@ -7,8 +7,8 @@ import {
 } from '../../repositories/user/index.js';
 import { hidePassword } from '../../utils/password.js';
 
-export const getAllUsersService = async (page, limit, sortBy, order) => {
-  const users = await findUserByPaginate(page, limit, sortBy, order);
+export const getAllUsersService = async (query) => {
+  const users = await findUserByPaginate(query);
 
   return {
     success: true,
@@ -39,8 +39,8 @@ export const getUserService = async (userId) => {
   };
 };
 
-export const updateUserService = async (data, userId) => {
-  const user = await findAndUpdateUser(data, userId);
+export const updateUserService = async ({ data, userId }) => {
+  const user = await findAndUpdateUser({ data, userId });
 
   if (!user) {
     return {
@@ -53,7 +53,7 @@ export const updateUserService = async (data, userId) => {
   const userResponse = hidePassword(user);
   return {
     success: true,
-    message: 'Users updated successfully',
+    message: 'User updated successfully',
     status: 200,
     data: userResponse,
   };

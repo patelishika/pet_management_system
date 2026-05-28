@@ -11,12 +11,13 @@ import { paramSchema } from '../schemas/params.js';
 
 export const getAllUsers = async (req, res) => {
   try {
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
-    const sortBy = req.query.sortBy || 'createdAt';
-    const order = req.query.order === 'asc' ? 1 : -1 || 1;
-
-    const result = await getAllUsersService(page, limit, sortBy, order);
+    
+    const result = await getAllUsersService({
+    page = req.query.page || 1,
+    limit = req.query.limit || 10,
+    sortBy = req.query.sortBy || 'createdAt',
+    order = req.query.order === 'asc' ? 1 : -1 || 1,
+});
 
     return res.status(result.status).json({
       message: result.message,
@@ -30,9 +31,8 @@ export const getAllUsers = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const userId = req.user.id;
-
-    const result = await getUserService(userId);
+  
+    const result = await getUserService({userId:req.user.id});
 
     if (!result.success) {
       return res.status(result.status).json({
@@ -53,13 +53,12 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { data, success, error } = updateUserSchema.safeParse(req.body);
-    const userId = req.user.id;
 
     if (!success) {
       return res.status(400).json({ message: 'Invalid request', error: error });
     }
 
-    const result = await updateUserService(data, userId);
+    const result = await updateUserService({data,userId:req.user.id});
 
     if (!result.success) {
       return res.status(result.status).json({
@@ -79,9 +78,8 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const userId = req.user.id;
 
-    const result = await deleteUserService(userId);
+    const result = await deleteUserService({userId:req.user.id});
 
     if (!result.success) {
       return res.status(result.status).json({

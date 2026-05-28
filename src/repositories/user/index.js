@@ -1,13 +1,13 @@
 import { User } from '../../models/user.js';
 
-export const findUserByPaginate = async (page, limit, sortBy, order) => {
+export const findUserByPaginate = async (query) => {
   const users = await User.paginate(
     {},
     {
-      page,
-      limit,
+      page: query.page,
+      limit: query.limit,
       sort: {
-        sortBy: order,
+        [query.sortBy]: query.order,
       },
       select: '-password',
     }
@@ -21,7 +21,7 @@ export const findUserById = async (userId) => {
   return user;
 };
 
-export const findAndUpdateUser = async (data, userId) => {
+export const findAndUpdateUser = async ({ data, userId }) => {
   const user = await User.findByIdAndUpdate(userId, data, {
     new: true,
   });
