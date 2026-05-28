@@ -41,7 +41,7 @@ export const updatePetById = async (petId, data) => {
   return updatedPet;
 };
 
-export const deletePetById = async (petId, userId) => {
-  const pet = await Pet.findByIdAndDelete({ id: petId, owner: userId });
+export const deletePetById = async (data) => {
+  const pet = await Pet.findByIdAndDelete({ id: data.petId, owner: data.userId });
   return pet;
 };

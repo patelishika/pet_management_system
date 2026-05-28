@@ -156,8 +156,8 @@ export const updatePetService = async ({ petId, userId, data }) => {
   };
 };
 
-export const deletePetService = async (petId, userId) => {
-  const pet = await deletePetById(petId, userId);
+export const deletePetService = async (data) => {
+  const pet = await deletePetById(data);
 
   if (!pet) {
     return {
